@@ -36,6 +36,9 @@ echo "Creating directory structure..."
 rm -rf $BASE_DIR/Settings
 rm -rf $BASE_DIR/noAnalytics
 
+# ensure dalvik-cache exists
+mkdir -p /cache/dalvik-cache
+mkdir -p /cache/dalvik-cache
 mkdir -p $BASE_DIR/Settings/smali
 mkdir -p $BASE_DIR/noAnalytics/smali/com/google/analytics/tracking/android
 

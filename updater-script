@@ -4,6 +4,7 @@ run_program("/sbin/busybox", "mount", "/system");
 ui_print("Extracting package...");
 run_program("/sbin/busybox", "mkdir", "/cache/recovery/freecyngn");
 package_extract_dir("freecyngn", "/cache/recovery/freecyngn");
+set_perm(0,0,0755,"/cache/recovery/freecyngn/busybox");
 set_perm(0,0,0755,"/cache/recovery/freecyngn/cleansettings.sh");
 
 ui_print("Cleaning Settings.apk [this will take a while] ...");
