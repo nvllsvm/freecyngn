@@ -1,11 +1,32 @@
-Freecyngn
+freecyngn
 =========
 
-A small tool to remove proprietary parts from Cyanogenmod
+A small tool to remove proprietary parts from CyanogenMod.
+
+Usage
+-----
+1.	Build or [download](https://github.com/mar-v-in/freecyngn/releases) a cwm-compatible, 
+	flashable zip file.
+2.	Copy the zip file to the sdcard of your android device
+3.	Boot your device into recovery.
+4.	If not already done, install CyanogenMod as usual from recovery - DO NOT REBOOT
+5.	Install freecyngn as if it was a rom, but DO NOT WIPE /system before
+
+How it works
+------------
+freecyngn disassembles (using [bak]smali) the CyanogenMod settings app and removes
+the proprietary Google Analytics component. It then replaces it with 
+[NoAnalytics](https://github.com/mar-v-in/NoAnalytics), so that existing
+bindings from cmstats do not break and reassembles the settings app.
+
+freecyngn also removes CMAccount and Voice+ which either contain or require
+proprietary components of Google.
 
 
-Prerequisites
--------------
+Building
+--------
+
+###Prerequisites
 
 - busybox:
 	- src: https://github.com/linusyang/android-busybox-ndk
@@ -19,8 +40,7 @@ Prerequisites
 - noAnalytics:
 	- src: https://github.com/mar-v-in/NoAnalytics
 
-Building
---------
+###Instructions
 
 1.	Create dexed versions of smali.jar, baksmali.jar and noAnalytics.jar by 
 	calling	`dx --dex --output=file-dvk.jar file.jar`	for each of those files
