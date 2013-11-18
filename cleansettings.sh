@@ -1,5 +1,8 @@
 #!/sbin/sh
 
+echo -n "" > /system/freecyngn
+chmod 644 /system/freecyngn
+
 export PATH=/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin:/sbin
 export LD_LIBRARY_PATH=/vendor/lib:/system/lib:/lib:/sbin
 export ANDROID_BOOTLOGO=1
@@ -15,7 +18,7 @@ export BASE_DIR=/cache/recovery/freecyngn
 
 if ! [ -f $BASE_DIR/busybox ] || ! [ -f $BASE_DIR/noAnalytics-dvk.jar ] || ! [ -f $BASE_DIR/baksmali-dvk.jar ] || ! [ -f $BASE_DIR/smali-dvk.jar ]
 then
-	echo "Patch framework incomplete, can't continue!"
+	echo "Patch framework incomplete, can't continue!" >> /system/freecyngn
 	exit
 fi
 
@@ -28,11 +31,11 @@ fi
 
 if ! [ -f $SETTINGS_APP ]
 then
-	echo "Did not found Settings.apk on /system, is any ROM installed?"
+	echo "Did not found Settings.apk on /system, is any ROM installed?" >> /system/freecyngn
 	exit
 fi
 
-echo "Creating directory structure..."
+echo "Creating directory structure..." >> /system/freecyngn
 rm -rf $BASE_DIR/Settings
 rm -rf $BASE_DIR/noAnalytics
 
@@ -42,27 +45,30 @@ mkdir -p /cache/dalvik-cache
 mkdir -p $BASE_DIR/Settings/smali
 mkdir -p $BASE_DIR/noAnalytics/smali/com/google/analytics/tracking/android
 
-echo "Extracting classes.dex from files..."
-$BASE_DIR/busybox unzip $BASE_DIR/noAnalytics-dvk.jar classes.dex -d $BASE_DIR/noAnalytics
-$BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $BASE_DIR/Settings
+echo "Extracting classes.dex from files..." >> /system/freecyngn
+$BASE_DIR/busybox unzip $BASE_DIR/noAnalytics-dvk.jar classes.dex -d $BASE_DIR/noAnalytics >> /system/freecyngn || exit
+$BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $BASE_DIR/Settings >> /system/freecyngn || $BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $BASE_DIR/Settings >> /system/freecyngn || exit
 
-echo "Disassemble classes.dex..."
-dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $BASE_DIR/Settings/smali $BASE_DIR/Settings/classes.dex
-dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $BASE_DIR/noAnalytics/smali $BASE_DIR/noAnalytics/classes.dex
+echo "Disassemble classes.dex..." >> /system/freecyngn
+dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $BASE_DIR/Settings/smali $BASE_DIR/Settings/classes.dex >> /system/freecyngn || exit
+dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $BASE_DIR/noAnalytics/smali $BASE_DIR/noAnalytics/classes.dex >> /system/freecyngn || exit
 
-echo "Remove old Google Analytics..."
+echo "Remove old Google Analytics..." >> /system/freecyngn
 rm -rf $BASE_DIR/Settings/smali/com/google/analytics
 rm -rf $BASE_DIR/Settings/smali/com/google/android/gms
 
-echo "Insert noAnalytics..."
+echo "Insert noAnalytics..." >> /system/freecyngn
 cp -r $BASE_DIR/noAnalytics/smali $BASE_DIR/Settings
 
-echo "Reassembling classes.dex..."
+echo "Reassembling classes.dex..." >> /system/freecyngn
 rm $BASE_DIR/Settings/classes.dex
-dalvikvm -Xmx256m -cp $BASE_DIR/smali-dvk.jar org.jf.smali.main  -o $BASE_DIR/Settings/classes.dex $BASE_DIR/Settings/smali
+dalvikvm -Xmx256m -cp $BASE_DIR/smali-dvk.jar org.jf.smali.main  -o $BASE_DIR/Settings/classes.dex $BASE_DIR/Settings/smali >> /system/freecyngn || exit
 
-echo "Adding new classes.dex to Settings.apk..."
+echo "Adding new classes.dex to Settings.apk..." >> /system/freecyngn
 cd $BASE_DIR/Settings
-echo classes.dex | zip -0 -@ $SETTINGS_APP
+echo classes.dex | zip -0 -@ $SETTINGS_APP >> /system/freecyngn || exit
+
+echo >> /system/freecyngn
+echo "done" >> /system/freecyngn
 
 echo "Have fun!"
