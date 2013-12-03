@@ -31,7 +31,7 @@ fi
 
 if ! [ -f $SETTINGS_APP ]
 then
-	echo "Did not found Settings.apk on /system, is any ROM installed?" >> /system/freecyngn
+	echo "Did not find Settings.apk on /system, is any ROM installed?" >> /system/freecyngn
 	exit
 fi
 
