@@ -11,6 +11,7 @@ Usage
 3.	Boot your device into recovery.
 4.	If not already done, install CyanogenMod as usual from recovery - DO NOT REBOOT
 5.	Install freecyngn as if it was a rom, but DO NOT WIPE /system before
+6.	Make sure there is no error output in /system/freecyngn
 
 Note: You need to repeat step 5 everytime you update CyanogenMod. Do not use the CMUpdater,
 as it will reboot the recovery after the update without giving you the choice to reflash 
