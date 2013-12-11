@@ -51,5 +51,5 @@ Building
 	calling	`dx --dex --output=file-dvk.jar file.jar`	for each of those files
 2.	Create a flashable zip file using using the given updater-script
 3.	In the newly created zip file, create a folder freecyngn on /
-4.	Copy busybox binary, the three *-dvk.jar files and the cleansettings.sh in the zips subfolder
+4.	Copy busybox binary, the three *-dvk.jar files and the *.sh files in the zips subfolder
 5.	You're done

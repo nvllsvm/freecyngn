@@ -1,7 +1,10 @@
 #!/sbin/sh
 
-LOGFILE=/system/freecyngn
+export BASE_DIR=/system/freecyngn
+export TMP_DIR=/tmp/freecyngn
+LOGFILE=$BASE_DIR/log
 
+mkdir -p 
 echo -n "" > $LOGFILE
 chmod 644 $LOGFILE
 
@@ -15,8 +18,6 @@ export ANDROID_STORAGE=/storage
 export ASEC_MOUNTPOINT=/mnt/asec
 export LOOP_MOUNTPOINT=/mnt/obb
 export BOOTCLASSPATH=/system/framework/core.jar:/system/framework/conscrypt.jar:/system/framework/okhttp.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/framework2.jar:/system/framework/telephony-common.jar:/system/framework/voip-common.jar:/system/framework/mms-common.jar:/system/framework/android.policy.jar:/system/framework/services.jar:/system/framework/apache-xml.jar:/system/framework/webviewchromium.jar
-
-export BASE_DIR=/cache/recovery/freecyngn
 
 if ! [ -f $BASE_DIR/busybox ] || ! [ -f $BASE_DIR/noAnalytics-dvk.jar ] || ! [ -f $BASE_DIR/baksmali-dvk.jar ] || ! [ -f $BASE_DIR/smali-dvk.jar ]
 then
@@ -38,37 +39,49 @@ then
 fi
 
 echo "Creating directory structure..." >> $LOGFILE
-rm -rf $BASE_DIR/Settings
-rm -rf $BASE_DIR/noAnalytics
+rm -rf $TMP_DIR/Settings
+rm -rf $TMP_DIR/noAnalytics
 
 # ensure dalvik-cache exists
 mkdir -p /cache/dalvik-cache
 mkdir -p /cache/dalvik-cache
-mkdir -p $BASE_DIR/Settings/smali
-mkdir -p $BASE_DIR/noAnalytics/smali/com/google/analytics/tracking/android
+
+mkdir -p $TMP_DIR/Settings/smali
+mkdir -p $TMP_DIR/noAnalytics/smali/com/google/analytics/tracking/android
 
 echo "Extracting classes.dex from files..." >> $LOGFILE
-$BASE_DIR/busybox unzip $BASE_DIR/noAnalytics-dvk.jar classes.dex -d $BASE_DIR/noAnalytics >> $LOGFILE || exit
-$BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $BASE_DIR/Settings >> $LOGFILE || $BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $BASE_DIR/Settings >> $LOGFILE || exit
+$BASE_DIR/busybox unzip $BASE_DIR/noAnalytics-dvk.jar classes.dex -d $TMP_DIR/noAnalytics >> $LOGFILE || exit
+$BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $TMP_DIR/Settings >> $LOGFILE || $BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $TMP_DIR/Settings >> $LOGFILE || exit
 
 echo "Disassemble classes.dex..." >> $LOGFILE
-dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $BASE_DIR/Settings/smali $BASE_DIR/Settings/classes.dex >> $LOGFILE || exit
-dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $BASE_DIR/noAnalytics/smali $BASE_DIR/noAnalytics/classes.dex >> $LOGFILE || exit
+dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $TMP_DIR/Settings/smali $TMP_DIR/Settings/classes.dex >> $LOGFILE || exit
+dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $TMP_DIR/noAnalytics/smali $TMP_DIR/noAnalytics/classes.dex >> $LOGFILE || exit
 
 echo "Remove old Google Analytics..." >> $LOGFILE
-rm -rf $BASE_DIR/Settings/smali/com/google/analytics
-rm -rf $BASE_DIR/Settings/smali/com/google/android/gms
+rm -rf $TMP_DIR/Settings/smali/com/google/analytics
+rm -rf $TMP_DIR/Settings/smali/com/google/android/gms
 
 echo "Insert noAnalytics..." >> $LOGFILE
-cp -r $BASE_DIR/noAnalytics/smali $BASE_DIR/Settings
+cp -r $TMP_DIR/noAnalytics/smali $TMP_DIR/Settings
 
 echo "Reassembling classes.dex..." >> $LOGFILE
-rm $BASE_DIR/Settings/classes.dex
-dalvikvm -Xmx256m -cp $BASE_DIR/smali-dvk.jar org.jf.smali.main  -o $BASE_DIR/Settings/classes.dex $BASE_DIR/Settings/smali >> $LOGFILE || exit
+rm $TMP_DIR/Settings/classes.dex
+dalvikvm -Xmx256m -cp $BASE_DIR/smali-dvk.jar org.jf.smali.main  -o $TMP_DIR/Settings/classes.dex $TMP_DIR/Settings/smali >> $LOGFILE || exit
 
 echo "Adding new classes.dex to Settings.apk..." >> $LOGFILE
-cd $BASE_DIR/Settings
+cd $TMP_DIR/Settings
 echo classes.dex | zip -0 -@ $SETTINGS_APP >> $LOGFILE || exit
+
+echo "Cleaning up apps..." >> $LOGFILE
+rm /system/app/Voice+.apk
+rm /system/app/CMAccount.apk
+rm /system/app/WhisperPush.apk
+rm /system/app/VoicePlus.apk
+rm /system/priv-app/CMS.apk
+
+echo "Installing self-reflasher..." >> $LOGFILE
+cp $BASE_DIR/20-freecyngn.sh /system/addon.d/20-freecyngn.sh
+chmod 755 /system/addon.d/20-freecyngn.sh
 
 echo >> $LOGFILE
 echo "done" >> $LOGFILE

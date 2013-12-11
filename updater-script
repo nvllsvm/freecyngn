@@ -2,20 +2,13 @@ ui_print("Mounting /system...");
 run_program("/sbin/busybox", "mount", "/system");
 
 ui_print("Extracting package...");
-run_program("/sbin/busybox", "mkdir", "/cache/recovery/freecyngn");
-package_extract_dir("freecyngn", "/cache/recovery/freecyngn");
-set_perm(0,0,0755,"/cache/recovery/freecyngn/busybox");
-set_perm(0,0,0755,"/cache/recovery/freecyngn/cleansettings.sh");
+run_program("/sbin/busybox", "mkdir", "/system/freecyngn");
+package_extract_dir("freecyngn", "/system/freecyngn");
+set_perm(0,0,0755,"/system/freecyngn/busybox");
+set_perm(0,0,0755,"/system/freecyngn/freecyngn.sh");
 
-ui_print("Cleaning Settings.apk [this will take a while] ...");
-run_program("/cache/recovery/freecyngn/cleansettings.sh");
-
-ui_print("Removing temporary files...");
-delete_recursive("/cache/recovery/freecyngn");
-
-ui_print("Removing proprietary stuff...");
-delete("/system/app/CMAccount.apk");
-delete("/system/app/Voice+.apk");
+ui_print("Cleaning up [this will take a while] ...");
+run_program("/system/freecyngn/freecyngn.sh");
 
 ui_print("Unmounting /system...");
 unmount("/system");
