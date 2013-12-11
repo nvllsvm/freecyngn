@@ -50,12 +50,12 @@ mkdir -p $TMP_DIR/Settings/smali
 mkdir -p $TMP_DIR/noAnalytics/smali/com/google/analytics/tracking/android
 
 echo "Extracting classes.dex from files..." >> $LOGFILE
-$BASE_DIR/busybox unzip $BASE_DIR/noAnalytics-dvk.jar classes.dex -d $TMP_DIR/noAnalytics >> $LOGFILE || exit
-$BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $TMP_DIR/Settings >> $LOGFILE || $BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $TMP_DIR/Settings >> $LOGFILE || exit
+$BASE_DIR/busybox unzip $BASE_DIR/noAnalytics-dvk.jar classes.dex -d $TMP_DIR/noAnalytics >> $LOGFILE
+$BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $TMP_DIR/Settings >> $LOGFILE || $BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $TMP_DIR/Settings >> $LOGFILE
 
 echo "Disassemble classes.dex..." >> $LOGFILE
-dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $TMP_DIR/Settings/smali $TMP_DIR/Settings/classes.dex >> $LOGFILE || exit
-dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $TMP_DIR/noAnalytics/smali $TMP_DIR/noAnalytics/classes.dex >> $LOGFILE || exit
+dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $TMP_DIR/Settings/smali $TMP_DIR/Settings/classes.dex >> $LOGFILE
+dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $TMP_DIR/noAnalytics/smali $TMP_DIR/noAnalytics/classes.dex >> $LOGFILE
 
 echo "Remove old Google Analytics..." >> $LOGFILE
 rm -rf $TMP_DIR/Settings/smali/com/google/analytics
@@ -66,11 +66,11 @@ cp -r $TMP_DIR/noAnalytics/smali $TMP_DIR/Settings
 
 echo "Reassembling classes.dex..." >> $LOGFILE
 rm $TMP_DIR/Settings/classes.dex
-dalvikvm -Xmx256m -cp $BASE_DIR/smali-dvk.jar org.jf.smali.main  -o $TMP_DIR/Settings/classes.dex $TMP_DIR/Settings/smali >> $LOGFILE || exit
+dalvikvm -Xmx256m -cp $BASE_DIR/smali-dvk.jar org.jf.smali.main  -o $TMP_DIR/Settings/classes.dex $TMP_DIR/Settings/smali >> $LOGFILE
 
 echo "Adding new classes.dex to Settings.apk..." >> $LOGFILE
 cd $TMP_DIR/Settings
-echo classes.dex | zip -0 -@ $SETTINGS_APP >> $LOGFILE || exit
+echo classes.dex | zip -0 -@ $SETTINGS_APP >> $LOGFILE
 
 echo "Cleaning up apps..." >> $LOGFILE
 rm /system/app/Voice+.apk
