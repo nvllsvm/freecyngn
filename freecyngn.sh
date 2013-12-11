@@ -4,7 +4,6 @@ export BASE_DIR=/system/freecyngn
 export TMP_DIR=/tmp/freecyngn
 LOGFILE=$BASE_DIR/log
 
-mkdir -p 
 echo -n "" > $LOGFILE
 chmod 644 $LOGFILE
 
