@@ -49,12 +49,14 @@ mkdir -p /cache/dalvik-cache
 mkdir -p $TMP_DIR/Settings/smali
 mkdir -p $TMP_DIR/noAnalytics/smali/com/google/analytics/tracking/android
 
-echo "Extracting classes.dex from files..." >> $LOGFILE
+echo "Extracting classes.dex from noAnalytics..." >> $LOGFILE
 $BASE_DIR/busybox unzip $BASE_DIR/noAnalytics-dvk.jar classes.dex -d $TMP_DIR/noAnalytics >> $LOGFILE
+echo "Extracting classes.dex from Settings..." >> $LOGFILE
 $BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $TMP_DIR/Settings >> $LOGFILE || $BASE_DIR/busybox unzip $SETTINGS_APP classes.dex -d $TMP_DIR/Settings >> $LOGFILE
 
-echo "Disassemble classes.dex..." >> $LOGFILE
+echo "Disassemble classes.dex from Settings..." >> $LOGFILE
 dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $TMP_DIR/Settings/smali $TMP_DIR/Settings/classes.dex >> $LOGFILE
+echo "Disassemble classes.dex from noAnalytics..." >> $LOGFILE
 dalvikvm -cp $BASE_DIR/baksmali-dvk.jar org.jf.baksmali.main -o $TMP_DIR/noAnalytics/smali $TMP_DIR/noAnalytics/classes.dex >> $LOGFILE
 
 echo "Remove old Google Analytics..." >> $LOGFILE
