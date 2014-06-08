@@ -78,6 +78,7 @@ rm /system/app/Voice+.apk
 rm /system/app/CMAccount.apk
 rm /system/app/WhisperPush.apk
 rm /system/app/VoicePlus.apk
+rm /system/app/VoiceDialer.apk
 rm /system/priv-app/CMS.apk
 rm /system/priv-app/CMAccount.apk
 
