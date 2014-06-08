@@ -79,6 +79,7 @@ rm /system/app/CMAccount.apk
 rm /system/app/WhisperPush.apk
 rm /system/app/VoicePlus.apk
 rm /system/priv-app/CMS.apk
+rm /system/priv-app/CMAccount.apk
 
 echo "Installing self-reflasher..." >> $LOGFILE
 cp $BASE_DIR/20-freecyngn.sh /system/addon.d/20-freecyngn.sh
