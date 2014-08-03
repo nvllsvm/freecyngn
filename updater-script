@@ -1,6 +1,9 @@
 ui_print("Mounting /system...");
 run_program("/sbin/busybox", "mount", "/system");
 
+ui_print("Mounting /data...");
+run_program("/sbin/busybox", "mount", "/data");
+
 ui_print("Extracting package...");
 run_program("/sbin/busybox", "mkdir", "/system/freecyngn");
 package_extract_dir("freecyngn", "/system/freecyngn");
@@ -12,6 +15,9 @@ run_program("/system/freecyngn/freecyngn.sh");
 
 ui_print("Unmounting /system...");
 unmount("/system");
+
+ui_print("Unmounting /data...");
+unmount("/data");
 
 ui_print("Done");
 
