@@ -53,3 +53,7 @@ Building
 3.	In the newly created zip file, create a folder freecyngn on /
 4.	Copy busybox binary, the three *-dvk.jar files and the *.sh files in the zips subfolder
 5.	You're done
+
+License
+-------
+freecyngn is licensed under WTFPL, see LICENSE
