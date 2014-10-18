@@ -8,6 +8,7 @@ ui_print("Extracting package...");
 run_program("/sbin/busybox", "mkdir", "/system/freecyngn");
 package_extract_dir("freecyngn", "/system/freecyngn");
 set_perm(0,0,0755,"/system/freecyngn/busybox");
+set_perm(0,0,0755,"/system/freecyngn/zip");
 set_perm(0,0,0755,"/system/freecyngn/freecyngn.sh");
 
 ui_print("Cleaning up [this will take a while] ...");

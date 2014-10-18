@@ -71,7 +71,7 @@ dalvikvm -Xmx256m -cp $BASE_DIR/smali-dvk.jar org.jf.smali.main  -o $TMP_DIR/Set
 
 echo "Adding new classes.dex to Settings.apk..." >> $LOGFILE
 cd $TMP_DIR/Settings
-echo classes.dex | zip -0 -@ $SETTINGS_APP >> $LOGFILE
+echo classes.dex | $BASE_DIR/zip -0 -@ $SETTINGS_APP >> $LOGFILE
 
 echo "Cleaning up apps..." >> $LOGFILE
 rm /system/*app/CMAccount.apk

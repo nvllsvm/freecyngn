@@ -35,6 +35,8 @@ Building
 - busybox:
 	- src: https://github.com/linusyang/android-busybox-ndk
 	- bin: https://code.google.com/p/yangapp/downloads/detail?name=busybox-1.21.1
+- zip:
+	- src: https://github.com/jruesga/android_external_zip
 - smali/baksmali: 
 	- src: https://bitbucket.org/JesusFreke/smali/src
 	- bin: https://bitbucket.org/JesusFreke/smali/downloads
@@ -50,7 +52,7 @@ Building
 	calling	`dx --dex --output=file-dvk.jar file.jar`	for each of those files
 2.	Create a flashable zip file using using the given updater-script
 3.	In the newly created zip file, create a folder freecyngn on /
-4.	Copy busybox binary, the three *-dvk.jar files and the *.sh files in the zips subfolder
+4.	Copy busybox binary, zip binary, the three *-dvk.jar files and the *.sh files in the zips subfolder
 5.	You're done
 
 License
