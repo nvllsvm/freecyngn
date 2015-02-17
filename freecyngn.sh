@@ -74,6 +74,7 @@ echo '--- Cleaning up apps...' >> $LOGFILE
 rm -f /system/*app/CMAccount.apk /system/*app/CMS.apk /system/*app/LockClock.apk  2>&1 >> $LOGFILE
 rm -f /system/*app/Voice+.apk /system/*app/VoiceDialer.apk /system/*app/VoicePlus.apk  2>&1 >> $LOGFILE
 rm -f /system/*app/WhisperPush.apk 2>&1 >> $LOGFILE
+rm -f /system/*app/CyanogenSetupWizard.apk /system/*app/CMSetupWizard.apk 2>&1 >> $LOGFILE
 
 
 echo '--- Installing self-reflasher...' >> $LOGFILE
