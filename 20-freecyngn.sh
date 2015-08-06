@@ -7,42 +7,26 @@
 
 . /tmp/backuptool.functions
 
-list_files() {
+deleteApk() {
+    rm -rf /system/app/$1.apk /system/priv-app/$1.apk /system/app/$1 /system/priv-app/$1 && echo "Removed $1"
+}
+
+del_files() {
 cat <<EOF
-freecyngn/freecyngn.sh
-freecyngn/noAnalytics-dvk.jar
-freecyngn/baksmali-dvk.jar
-freecyngn/smali-dvk.jar
-freecyngn/busybox
+CMAccount
+CMS
+CMSetupWizard
+CyanogenSetupWizard
+LockClock
+Voice+
+VoiceDialer
+VoicePlus
+WhisperPush
 EOF
 }
 
-case "$1" in
-  backup)
-    list_files | while read FILE DUMMY; do
-      backup_file $S/"$FILE"
+if [[ "$1" == "post-restore" ]] || [[ "$1" == "" ]]; then
+    del_files | while read FILE; do
+        deleteApk "$FILE"
     done
-  ;;
-  restore)
-    list_files | while read FILE REPLACEMENT; do
-      R=""
-      [ -n "$REPLACEMENT" ] && R="$S/$REPLACEMENT"
-      [ -f "$C/$S/$FILE" ] && restore_file $S/"$FILE" "$R"
-    done
-    chmod 755 /system/freecyngn/busybox
-    chmod 755 /system/freecyngn/freecyngn.sh
-    /system/freecyngn/freecyngn.sh
-  ;;
-  pre-backup)
-    # Stub
-  ;;
-  post-backup)
-    # Stub
-  ;;
-  pre-restore)
-    # Stub
-  ;;
-  post-restore)
-    # Stub
-  ;;
-esac
+fi
