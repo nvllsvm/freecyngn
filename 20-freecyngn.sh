@@ -13,11 +13,13 @@ deleteApk() {
 
 del_files() {
 cat <<EOF
+Browser
 CMAccount
 CMS
 CMSetupWizard
 CyanogenSetupWizard
 LockClock
+TimeService
 Voice+
 VoiceDialer
 VoicePlus
