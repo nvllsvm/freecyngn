@@ -6,11 +6,13 @@ A small tool to remove some proprietary parts from CyanogenMod.
 freecyngn removes the following components which either contain or require
 proprietary components of Google:
 
+- Browser (Gello)
 - CMAccount
 - CMS
 - CMSetupWizard
 - CyanogenSetupWizard
 - LockClock
+- TimeService
 - Voice+
 - VoiceDialer
 - VoicePlus
@@ -32,3 +34,10 @@ However make sure to regularly check for freecyngn updates, as CM may change som
 License
 -------
 freecyngn is licensed under WTFPL, see LICENSE
+
+Build Instructions
+------------------
+You should be able to download the last release and replace the updater-script and 20-freecyngn.sh with the latest.
+
+If you need to rebuild the updater-binary, or would like more information, see this wiki:
+http://wiki.cyanogenmod.org/w/Doc:_About_Edify
