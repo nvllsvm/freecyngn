@@ -13,7 +13,7 @@ deleteApk() {
 
 del_files() {
 cat <<EOF
-Browser
+Gello
 CMAccount
 CMS
 CMSetupWizard
