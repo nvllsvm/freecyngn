@@ -1,11 +1,9 @@
 #!/sbin/sh
 #
 # /system/addon.d/20-freecyngn.sh
-# During a CM10+ upgrade this script repatches CyanogenMod
+# During a CyanogenMod upgrade this script repatches CyanogenMod
 # using the freecyngn patchset.
 #
-
-. /tmp/backuptool.functions
 
 deleteApk() {
     rm -rf /system/app/$1.apk /system/priv-app/$1.apk /system/app/$1 /system/priv-app/$1 && echo "Removed $1"
@@ -13,17 +11,10 @@ deleteApk() {
 
 del_files() {
 cat <<EOF
-Gello
-CMAccount
-CMS
-CMSetupWizard
 CyanogenSetupWizard
+Gello
 LockClock
 TimeService
-Voice+
-VoiceDialer
-VoicePlus
-WhisperPush
 EOF
 }
 
@@ -32,3 +23,7 @@ if [[ "$1" == "post-restore" ]] || [[ "$1" == "" ]]; then
         deleteApk "$FILE"
     done
 fi
+
+# Needed due to the removal of CyanogenSetupWizard.
+# Without, the home button and quick settings are broken.
+/system/xbin/sqlite3 /data/data/org.cyanogenmod.cmsettings/databases/cmsettings.db "update secure set value = 1 where name = 'cm_setup_wizard_completed';"
