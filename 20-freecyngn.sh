@@ -26,4 +26,4 @@ fi
 
 # Needed due to the removal of CyanogenSetupWizard.
 # Without, the home button and quick settings are broken.
-/system/xbin/sqlite3 /data/data/org.cyanogenmod.cmsettings/databases/cmsettings.db "update secure set value = 1 where name = 'cm_setup_wizard_completed';"
+/system/xbin/sqlite3 /data/user_de/0/org.cyanogenmod.cmsettings/databases/cmsettings.db "update secure set value = 1 where name = 'cm_setup_wizard_completed';"
